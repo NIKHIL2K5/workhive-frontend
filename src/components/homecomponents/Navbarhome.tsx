@@ -7,7 +7,7 @@ function Navbar() {
       <div className="flex items-center justify-between w-full px-8 py-4">
         <img
           src="https://res.cloudinary.com/dboscnm7g/image/upload/v1763030368/WORKHIVE_LOGO-removebg-preview_pfnlpq.png"
-          className="h-20"
+          className="h-24"
           alt="WorkHive"
           onClick={()=>navigate("/home")}
         />
@@ -18,10 +18,10 @@ function Navbar() {
         </div>
 
         <div className="flex gap-4">
-          <button className="px-4 py-2 rounded-lg font-medium font-[arial] font-bold">
+          <button className="px-4 py-2 rounded-lg font-medium font-[arial] font-bold" onClick={()=>navigate("./signup")}>
             Join the Hive
           </button>
-          <button className="px-4 py-2 rounded-lg font-medium font-[arial] font-bold">
+          <button className="px-4 py-2 rounded-lg font-medium font-[arial] font-bold" onClick={()=>navigate("./signup")}>
             Log in
           </button>
         </div>

@@ -23,7 +23,7 @@ function Chooseus() {
 
                 {/* Section Title */}
                 <div className="text-center mb-20">
-                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight" id="WhyChooseWorkHive">
                         Why Choose <span className="text-yellow-400">WORKHIVE</span>
                     </h2>
                     <p className="mt-4 text-gray-300 text-lg">

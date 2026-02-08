@@ -34,7 +34,7 @@ function InfiniteStackedServices() {
     }, [active]);
 
     return (
-        <section className="relative py-24  flex flex-col items-center overflow-hidden   bg-[#FFFEE4]">
+        <section className="relative py-24  flex flex-col items-center overflow-hidden bg-[#FFFEE4]">
 
             <h2 className="text-4xl font-semibold mb-12 font-[arial] font-extrabold">Our Services</h2>
 

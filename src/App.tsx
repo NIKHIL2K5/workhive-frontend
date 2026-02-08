@@ -23,49 +23,33 @@ import Socialmedia from './pages/Common/SocialMedia'
 import Tinder from './pages/Common/Tinder'
 
 function App() {
-  const [showPreload, setPreload] = useState<boolean>(false)
-  const [leaving, setIsleaving] = useState<boolean>(false)
-  const [prepareToExit, setPrepareToExit] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const [showPreload, setPreload] = useState(false);
+  const [leaving, setIsleaving] = useState(false);
+  const [prepareToExit, setPrepareToExit] = useState(false);
 
   useEffect(() => {
-    const hasSeenPreload = sessionStorage.getItem("hasSeen")
-    if (!hasSeenPreload) {
-      setPreload(true)
-    }
+    const hasSeenPreload = sessionStorage.getItem("hasSeen");
+    if (hasSeenPreload) return;
+    setPreload(true);
 
-    const exitTimer = setTimeout(() => {
-      setIsleaving(true)
-    }, 4500)
+    const exitTimer = setTimeout(() => setIsleaving(true), 3000);
+    const finalTimer = setTimeout(() => {
+      sessionStorage.setItem("hasSeen", "true");
+      setPreload(false);
+    }, 4500);
 
-    const isExiting = setTimeout(() => {
-      setPrepareToExit(true)
-    }, 3000)
-
-    const timer = setTimeout(() => {
-      sessionStorage.setItem("hasSeen", "true")
-      setPreload(false)
-      setIsleaving(false)
-      navigate("/Home")
-    }, 4500)
     return () => {
-      clearTimeout(timer)
-      clearTimeout(exitTimer)
-    }
-
-  }, [navigate])
-
-  // if (showPreload) {
-  //   return <Preload isLeaving={leaving} isExiting={prepareToExit} />
-  // }
-
+      clearTimeout(exitTimer);
+      clearTimeout(finalTimer);
+    };
+  }, []);
   return (
     <>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/Home" element={<Home />} />
-      <Route path="/Home/Signin" element={<Signin />} />
-      <Route path="/Home/Signup" element={<Signup />} />
+      <Route path="/Signin" element={<Signin />} />
+      <Route path="/Signup" element={<Signup />} />
 
       <Route path="/Client/Dashboard" element={<ClientDashboard />} />
       <Route path="/Client/Findfreelancer" element={<Findfreelancer />} />

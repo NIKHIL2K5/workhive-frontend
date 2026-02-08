@@ -1,49 +1,52 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbarhome";
 import type { Key } from "react";
 
 function Carousal() {
+  const STORAGE_KEY = "carousal-slide-state";
+
   const [slide, setSlide] = useState<boolean>(() => {
-    const stored = localStorage.getItem("slide");
+    const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : false;
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setSlide(prev => !prev);
-    }, 10000);
+  // only run carousel on home page
+  if (location.pathname !== "/") return;
 
-    return () => clearInterval(id);
-  }, []);
+  const id = setInterval(() => {
+    setSlide(prev => !prev);
+  }, 10000);
+
+  return () => clearInterval(id);
+}, [location.pathname]);
 
   useEffect(() => {
-    localStorage.setItem("slide", JSON.stringify(slide));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(slide));
   }, [slide]);
 
-  const slideKey: Key = slide ? "slide-true" : "slide-false";
+  const slideKey: Key = slide ? "carousal-true" : "carousal-false";
 
   return (
     <>
+      {/* 🔒 COMPONENT-SCOPED STYLES */}
       <style>
         {`
-@keyframes fill {
+@keyframes carousal-fill {
   from { width: 0% }
   to { width: 100% }
 }
 
-.animate-fill {
-  animation: fill 10s linear forwards;
+.carousal-animate-fill {
+  animation: carousal-fill 10s linear forwards;
 }
 `}
       </style>
 
-      {/* 🔑 WRAPPER */}
       <div className="relative min-h-screen overflow-hidden">
-
-        {/* Background A – Client */}
+        {/* Background A */}
         <div
           className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
             slide ? "opacity-0" : "opacity-100"
@@ -54,7 +57,7 @@ function Carousal() {
           }}
         />
 
-        {/* Background B – Freelancer */}
+        {/* Background B */}
         <div
           className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
             slide ? "opacity-100" : "opacity-0"
@@ -67,12 +70,8 @@ function Carousal() {
 
         {/* CONTENT */}
         <div className="relative z-10 flex flex-col min-h-screen">
-          <Navbar />
-
-          {/* HERO */}
           <div className="flex-1 flex items-center">
             {!slide ? (
-              /* ================= CLIENT (RIGHT) ================= */
               <div className="w-full flex justify-end">
                 <div className="max-w-md pr-20 text-right">
                   <h1 className="text-3xl font-bold text-black leading-tight">
@@ -80,13 +79,15 @@ function Carousal() {
                     Build with Speed
                   </h1>
 
-                  <button className="mt-6 px-6 py-3 bg-black text-white rounded-md" onClick={()=>navigate("./signin")}>
+                  <button
+                    className="mt-6 px-6 py-3 bg-black text-white rounded-md"
+                    onClick={() => navigate("./signin")}
+                  >
                     Join the Hive as Client
                   </button>
                 </div>
               </div>
             ) : (
-              /* ================= FREELANCER (LEFT) ================= */
               <div className="w-full flex justify-start">
                 <div className="max-w-md pl-20 text-left">
                   <h1 className="text-3xl font-bold text-black leading-tight">
@@ -94,7 +95,10 @@ function Carousal() {
                     Earn What You Deserve
                   </h1>
 
-                  <button className="mt-6 px-6 py-3 bg-black text-white rounded-md" onClick={()=>navigate("./signin")}>
+                  <button
+                    className="mt-6 px-6 py-3 bg-black text-white rounded-md"
+                    onClick={() => navigate("./signin")}
+                  >
                     Join the Hive as Freelancer
                   </button>
                 </div>
@@ -107,7 +111,7 @@ function Carousal() {
             <div className="w-40 h-2 bg-white/40 overflow-hidden rounded">
               <div
                 key={slideKey}
-                className="h-full bg-black animate-fill"
+                className="h-full bg-black carousal-animate-fill"
               />
             </div>
           </div>

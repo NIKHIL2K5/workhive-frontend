@@ -6,7 +6,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-transparent">
+    <nav className="w-full bg-[#FFFEE4]">
       <div className="flex items-center justify-between w-full px-6 sm:px-8 py-4">
         
         {/* Logo */}
@@ -31,7 +31,7 @@ function Navbar() {
         <div className="hidden md:flex gap-4">
           <button
             className="px-4 py-2 rounded-lg font-bold font-[arial]"
-            onClick={() => navigate("./signup")}
+            onClick={() => navigate("./signin")}
           >
             Join the Hive
           </button>
@@ -80,7 +80,7 @@ function Navbar() {
             <button
               className="px-4 py-2 rounded-lg font-bold font-[arial]"
               onClick={() => {
-                navigate("./signup");
+                navigate("./signin");
                 setOpen(false);
               }}
             >

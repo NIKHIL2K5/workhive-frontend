@@ -1,3 +1,4 @@
+import Navbar from "../components/homecomponents/Navbarhome";
 import Carousal from "../components/homecomponents/Carousal";
 import Chooseus from "../components/homecomponents/Chooseus";
 import Services from "../components/homecomponents/Services";
@@ -8,6 +9,7 @@ import Footer from "../components/homecomponents/Footer";
 function Home() {
   return (
     <>
+    <Navbar />
       <Carousal />
       <Chooseus />
       <Services />

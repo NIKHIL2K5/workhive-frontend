@@ -33,6 +33,10 @@ function InfiniteStackedServices() {
         }
     }, [active]);
 
+    useEffect(()=>{
+        
+    })
+
     return (
         <section className="relative py-24  flex flex-col items-center overflow-hidden bg-[#FFFEE4]">
 

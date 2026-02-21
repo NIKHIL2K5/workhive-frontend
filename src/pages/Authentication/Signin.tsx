@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../Store/store";
+import { registerThunk } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 type FormState = {
     name: string;
@@ -13,15 +18,27 @@ type FormState = {
 type ErrorState = Partial<Record<keyof FormState, string>>;
 
 function SignIn() {
+
+    const location = useLocation()
+
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    const { loading, error } = useSelector(
+        (state: RootState) => state.auth
+    );
+
     const [form, setForm] = useState<FormState>({
         name: "",
         userName: "",
         email: "",
         password: "",
-        role: "",
+        role: location.state?.role || "",
         country: "",
         avatar: null,
     });
+
+    const [preview, setPreview] = useState<string | null>(null)
 
     const [errors, setErrors] = useState<ErrorState>({});
 
@@ -46,12 +63,41 @@ function SignIn() {
         setErrors(e);
         return Object.keys(e).length === 0;
     };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validate()) return;
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!validate()) return;
-        console.log("Submitted:", form);
-    };
+    const formattedRole =
+        form.role.charAt(0).toUpperCase() + form.role.slice(1).toLowerCase();
+
+    const formData = new FormData();
+
+    formData.append("name", form.name);
+    formData.append("userName", form.userName);
+    formData.append("email", form.email);
+    formData.append("password", form.password);
+    formData.append("country", form.country);
+    formData.append("role", formattedRole);
+
+    if (form.avatar) {
+        formData.append("avatar", form.avatar);
+    }
+
+    const resultAction = await dispatch(
+        registerThunk(formData as any)
+    );
+
+    if (registerThunk.fulfilled.match(resultAction)) {
+        navigate("/dashboard");
+    }
+};
+    useEffect(() => {
+        return () => {
+            if (preview) {
+                URL.revokeObjectURL(preview);
+            }
+        };
+    }, [preview]);
 
     const DEFAULT_BG =
         "https://res.cloudinary.com/dboscnm7g/image/upload/v1770548461/AUTHENTICATION_PAGE_vsonds.png";
@@ -99,22 +145,53 @@ function SignIn() {
 
                     {/* Avatar */}
                     <div className="flex flex-col items-center mb-4">
-                        <label className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center cursor-pointer">
-                            <span className="text-white text-lg">👤</span>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                onChange={(e) =>
-                                    setForm({ ...form, avatar: e.target.files?.[0] || null })
-                                }
-                            />
-                        </label>
-                        <span className="text-xs mt-1 text-gray-700">
-                            Upload Your Images
+                        <div className="relative w-20 h-20">
+
+                            <label className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center cursor-pointer overflow-hidden">
+                                {preview ? (
+                                    <img
+                                        src={preview}
+                                        alt="Avatar Preview"
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-white text-2xl">👤</span>
+                                )}
+
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0] || null;
+
+                                        if (file && file.type.startsWith("image/")) {
+                                            setForm({ ...form, avatar: file });
+                                            setPreview(URL.createObjectURL(file));
+                                        }
+                                    }}
+                                />
+                            </label>
+
+                            {/* ❌ Remove Button */}
+                            {preview && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setPreview(null);
+                                        setForm({ ...form, avatar: null });
+                                    }}
+                                    className="absolute -top-2 -right-2 w-6 h-6 bg-black text-white rounded-full text-xs flex items-center justify-center shadow-md hover:bg-red-600 transition"
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+
+                        <span className="text-xs mt-2 text-gray-700">
+                            Upload Your Image
                         </span>
                     </div>
-
                     {/* Fields */}
                     <div className="space-y-2 text-sm">
                         <label className="font-semibold">YOUR NAME</label>
@@ -211,10 +288,16 @@ function SignIn() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition"
+                        disabled={loading}
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition disabled:opacity-50"
                     >
-                        SignIn into Hive
+                        {loading ? "Creating Account..." : "SignIn into Hive"}
                     </button>
+                    {error && (
+                        <p className="text-red-500 text-sm text-center mt-2">
+                            {error}
+                        </p>
+                    )}
                 </form>
             </div>
         </div>

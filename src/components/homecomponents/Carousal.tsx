@@ -13,15 +13,15 @@ function Carousal() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  // only run carousel on home page
-  if (location.pathname !== "/") return;
+    // only run carousel on home page
+    if (location.pathname !== "/") return;
 
-  const id = setInterval(() => {
-    setSlide(prev => !prev);
-  }, 10000);
+    const id = setInterval(() => {
+      setSlide(prev => !prev);
+    }, 10000);
 
-  return () => clearInterval(id);
-}, [location.pathname]);
+    return () => clearInterval(id);
+  }, [location.pathname]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(slide));
@@ -48,9 +48,8 @@ function Carousal() {
       <div className="relative min-h-screen overflow-hidden">
         {/* Background A */}
         <div
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-            slide ? "opacity-0" : "opacity-100"
-          }`}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${slide ? "opacity-0" : "opacity-100"
+            }`}
           style={{
             backgroundImage:
               "url('https://res.cloudinary.com/dboscnm7g/image/upload/v1768240172/client_carousal_1_zmrwmt.png')",
@@ -59,9 +58,8 @@ function Carousal() {
 
         {/* Background B */}
         <div
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-            slide ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${slide ? "opacity-100" : "opacity-0"
+            }`}
           style={{
             backgroundImage:
               "url('https://res.cloudinary.com/dboscnm7g/image/upload/v1768240173/freelance_carousal_main_bgimage_1_mhdell.png')",
@@ -81,7 +79,9 @@ function Carousal() {
 
                   <button
                     className="mt-6 px-6 py-3 bg-black text-white rounded-md"
-                    onClick={() => navigate("./signin")}
+                    onClick={() =>
+                      navigate("/signin", { state: { role: "client" } })
+                    }
                   >
                     Join the Hive as Client
                   </button>
@@ -97,7 +97,9 @@ function Carousal() {
 
                   <button
                     className="mt-6 px-6 py-3 bg-black text-white rounded-md"
-                    onClick={() => navigate("./signin")}
+                    onClick={() =>
+                      navigate("/signin", { state: { role: "freelancer" } })
+                    }
                   >
                     Join the Hive as Freelancer
                   </button>

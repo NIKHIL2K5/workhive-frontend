@@ -21,15 +21,15 @@ function Footer() {
                         >
                             <Facebook className="w-5 h-5 hover:text-gray-900 cursor-pointer transition" />
                         </a>
-                        <a href="https://linkedin.com/"
+                        <a href="https://www.linkedin.com/in/nikhil2k5/"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="WorkHive linkedin"><Linkedin className="w-5 h-5 hover:text-gray-900 cursor-pointer transition" /></a>
-                        <a href="https://youtube.com/"
+                        <a href="https://www.youtube.com/@NIKHIL_2K5"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="WorkHive youtube"><Youtube className="w-5 h-5 hover:text-gray-900 cursor-pointer transition" /></a>
-                         <a href="https://instagram.com/"
+                         <a href="https://www.instagram.com/nikhil2k5"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="WorkHive instagram"><Instagram className="w-5 h-5 hover:text-gray-900 cursor-pointer transition" /></a>
